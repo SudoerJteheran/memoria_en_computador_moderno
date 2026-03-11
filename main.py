@@ -6,11 +6,16 @@ FUENTE = "sans-serif"
 class Presentacion(Slide):
     def construct(self):
         self.camera.background_color = WHITE
-        # self.slide_memoria_computador()
-        # self.slide_por_que_jerarquia()
-        # self.slide_motivacion()
+        self.slide_memoria_computador()
+        self.slide_por_que_jerarquia()
+        self.slide_motivacion()
         self.slide_intro_tipos_jerarquia()
-
+        self.slide_memoria_primaria()
+        self.slide_memoria_secundaria()
+        self.slide_registers()
+        self.slide_cache()
+        self.slide_ram()
+        self.slide_ram_escalabilidad()
     def crear_titulo(self, texto, palabra_clave=None, color_clave=DARK_GRAY, font_size=42):
         t2c = {palabra_clave: color_clave} if palabra_clave else {}
         titulo = Text(texto, font=FUENTE, font_size=font_size, color=BLACK, t2c=t2c, weight=BOLD).to_edge(UP, buff=0.5)
@@ -324,3 +329,585 @@ class Presentacion(Slide):
         
         self.next_slide()
         self.limpiar_pantalla()
+
+    def slide_memoria_primaria(self):
+        titulo = Text(
+            "Memoria interna o primaria", 
+            font=FUENTE, font_size=40, color=BLACK, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+        
+        desc_1 = Text(
+            "Compuesta por la memoria principal, la memoria caché y los registros de la CPU.", 
+            font=FUENTE, font_size=24, color=DARK_GRAY
+        )
+        desc_2 = Text(
+            "El procesador tiene acceso directo a esta.", 
+            font=FUENTE, font_size=24, color=DARK_GRAY
+        )
+        descripcion = VGroup(desc_1, desc_2).arrange(DOWN, buff=0.2).next_to(titulo, DOWN, buff=0.4)
+
+        self.play(Write(titulo))
+        self.play(FadeIn(descripcion, shift=UP * 0.3))
+        self.next_slide() 
+
+        def crear_fila(y_pos, width_izq, color_izq, txt_izq, txt_der):
+            center_x_izq = -2.5 
+            buff = 0.15
+            right_x_align = 4.5
+
+            bloque_izq = RoundedRectangle(
+                width=width_izq, height=0.9, corner_radius=0.2, 
+                fill_color=color_izq, fill_opacity=1, stroke_width=0
+            )
+            bloque_izq.move_to([center_x_izq, y_pos, 0])
+            label_izq = Text(txt_izq, font=FUENTE, font_size=28, color=BLACK, weight=BOLD).move_to(bloque_izq)
+            grupo_izq = VGroup(bloque_izq, label_izq)
+            
+            left_x_der = center_x_izq + (width_izq / 2) + buff
+            width_der = right_x_align - left_x_der
+            center_x_der = (left_x_der + right_x_align) / 2
+            
+            bloque_der = RoundedRectangle(
+                width=width_der, height=0.9, corner_radius=0.2, 
+                fill_color=WHITE, fill_opacity=1, stroke_width=2, stroke_color=GRAY
+            )
+            bloque_der.move_to([center_x_der, y_pos, 0])
+            label_der = Text(txt_der, font=FUENTE, font_size=20, color=BLACK, weight=BOLD).move_to(bloque_der)
+            grupo_der = VGroup(bloque_der, label_der)
+            
+            return VGroup(grupo_izq, grupo_der)
+
+        color_n0 = "#E0E0E0"
+        color_n1 = "#C0C0C0" 
+        color_n2 = "#9E9E9E" 
+
+        y_n0 = 0.5
+        y_n1 = -0.6
+        y_n2 = -1.7
+
+        fila_0 = crear_fila(y_n0, 1.2, color_n0, "0", "Registros de la CPU")
+        fila_1 = crear_fila(y_n1, 2.4, color_n1, "Nivel 1", "Memoria Caché (SRAMS)")
+        fila_2 = crear_fila(y_n2, 3.6, color_n2, "Nivel 2", "Memoria Principal (DRAMS)")
+
+        self.play(FadeIn(fila_0, shift=UP * 0.3))
+        self.next_slide()
+        
+        self.play(FadeIn(fila_1, shift=UP * 0.3))
+        self.next_slide()
+        
+        self.play(FadeIn(fila_2, shift=UP * 0.3))
+        
+        self.next_slide()
+        self.limpiar_pantalla()
+
+    def slide_memoria_secundaria(self):
+        titulo = Text(
+            "Memoria externa o secundaria", 
+            font=FUENTE, font_size=40, color=BLACK, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+
+        desc_1 = Text(
+            "Comprende el disco magnético, el disco óptico y la cinta magnética,", 
+            font=FUENTE, font_size=22, color=DARK_GRAY
+        )
+        desc_2 = Text(
+            "es decir, dispositivos de almacenamiento periféricos a los que el", 
+            font=FUENTE, font_size=22, color=DARK_GRAY
+        )
+        desc_3 = Text(
+            "procesador puede acceder a través de un módulo de E/S.", 
+            font=FUENTE, font_size=22, color=DARK_GRAY
+        )
+        descripcion = VGroup(desc_1, desc_2, desc_3).arrange(DOWN, buff=0.15).next_to(titulo, DOWN, buff=0.3)
+
+        self.play(Write(titulo))
+        self.play(FadeIn(descripcion, shift=UP * 0.3))
+        self.next_slide() 
+
+        def crear_fila(y_pos, width_izq, color_izq, txt_izq, txt_der, color_txt_izq=BLACK, font_size_der=20):
+            center_x_izq = -2.5 
+            buff = 0.15 
+            right_x_align = 4.5 
+      
+            bloque_izq = RoundedRectangle(
+                width=width_izq, height=0.9, corner_radius=0.2, 
+                fill_color=color_izq, fill_opacity=1, stroke_width=0
+            )
+            bloque_izq.move_to([center_x_izq, y_pos, 0])
+            label_izq = Text(txt_izq, font=FUENTE, font_size=28, color=color_txt_izq, weight=BOLD).move_to(bloque_izq)
+            grupo_izq = VGroup(bloque_izq, label_izq)
+  
+            left_x_der = center_x_izq + (width_izq / 2) + buff
+            width_der = right_x_align - left_x_der
+            center_x_der = (left_x_der + right_x_align) / 2
+            
+            bloque_der = RoundedRectangle(
+                width=width_der, height=0.9, corner_radius=0.2, 
+                fill_color=WHITE, fill_opacity=1, stroke_width=2, stroke_color=GRAY
+            )
+            bloque_der.move_to([center_x_der, y_pos, 0])
+            
+
+            label_der = Text(txt_der, font=FUENTE, font_size=font_size_der, color=BLACK, weight=BOLD, line_spacing=1).move_to(bloque_der)
+            grupo_der = VGroup(bloque_der, label_der)
+            
+            return VGroup(grupo_izq, grupo_der)
+
+    
+        color_n3 = "#808080"
+        color_n4 = "#555555"
+        color_n5 = "#333333"
+
+        y_n3 = 0.2
+        y_n4 = -0.9
+        y_n5 = -2.0
+
+        fila_3 = crear_fila(y_n3, 4.8, color_n3, "Nivel 3", "Disco Magnético\n(Almacenamiento en Disco)", color_txt_izq=BLACK, font_size_der=18)
+        
+        fila_4 = crear_fila(y_n4, 6.0, color_n4, "Nivel 4", "Disco Óptico", color_txt_izq=WHITE)
+        fila_5 = crear_fila(y_n5, 7.2, color_n5, "Nivel 5", "Cinta Magnética", color_txt_izq=WHITE)
+
+        self.play(FadeIn(fila_3, shift=UP * 0.3))
+        self.next_slide()
+        
+        self.play(FadeIn(fila_4, shift=UP * 0.3))
+        self.next_slide()
+        
+        self.play(FadeIn(fila_5, shift=UP * 0.3))
+        
+        self.next_slide()
+        self.limpiar_pantalla()
+    def slide_registers(self):
+        fuente = "sans-serif"
+        color_texto = BLACK
+        color_secundario = DARK_GRAY
+        color_acento = GRAY
+        color_bg_suave = "#F4F4F4"
+        titulo = Text(
+            "Registers", 
+            font=fuente, font_size=45, color=color_texto, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+        
+        linea_subtitulo = Line(LEFT, RIGHT, color=color_acento, stroke_width=2).scale(2).next_to(titulo, DOWN, buff=0.1)
+
+        self.play(Write(titulo))
+        self.play(Create(linea_subtitulo))
+        self.next_slide() 
+
+        viñetas = [
+            "  - Pequeñas unidades de memoria.",
+            "  - Ubicadas dentro de la CPU.",
+            "  - Alta velocidad de operación.",
+            "  - Guardan datos e instrucciones.",
+            "  - Para la información de uso más frecuente."
+        ]
+        
+        grupo_texto = VGroup(
+            *[Text(linea, font=fuente, font_size=20, color=color_secundario) for linea in viñetas]
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+
+        linea_acento_texto = Line(
+            grupo_texto.get_corner(UL) + UP*0.1, 
+            grupo_texto.get_corner(DL) + DOWN*0.1, 
+            color=color_acento, stroke_width=4
+        )
+        grupo_izquierdo = VGroup(linea_acento_texto, grupo_texto).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
+
+        self.play(Create(linea_acento_texto))
+        self.play(FadeIn(grupo_texto, shift=RIGHT * 0.2))
+        self.next_slide() 
+
+        centro_diag = RIGHT * 3.5 + DOWN * 0.3
+        
+        fondo_circuito = RoundedRectangle(
+            width=6.5, height=4.2, corner_radius=0.2,
+            fill_color=color_bg_suave, fill_opacity=0.6, 
+            stroke_width=2, stroke_color=GRAY
+        ).move_to(centro_diag)
+
+        caja_registro = RoundedRectangle(
+            width=3.6, height=1.6, corner_radius=0.1,
+            fill_color=WHITE, fill_opacity=1, 
+            stroke_width=3, stroke_color=color_texto
+        ).move_to(centro_diag)
+        
+        txt_registro = Text("Register", font=fuente, font_size=26, color=color_texto, weight=BOLD).move_to(caja_registro).shift(UP * 0.1)
+        
+        reloj = Triangle(color=color_texto, fill_opacity=0, stroke_width=2)
+        reloj.stretch_to_fit_width(0.35)
+        reloj.stretch_to_fit_height(0.25) 
+        reloj.next_to(caja_registro.get_bottom(), UP, buff=0)
+
+        flecha_in_start = caja_registro.get_left() + LEFT * 1.4
+        flecha_in_end = caja_registro.get_left()
+        flecha_in = Arrow(start=flecha_in_start, end=flecha_in_end, buff=0, color=color_texto, stroke_width=4, max_tip_length_to_length_ratio=0.15)
+        
+        label_in = Text("in", font=fuente, font_size=22, color=color_texto).next_to(flecha_in, UP, buff=0.12).shift(LEFT*0.3)
+        slash_in = Line(DOWN, UP, color=color_acento, stroke_width=2).scale(0.25).rotate(PI/4).move_to(flecha_in.get_center())
+        txt_16_in = Text("16", font=fuente, font_size=16, color=color_acento).next_to(slash_in, DOWN, buff=0.1)
+
+        flecha_out_start = caja_registro.get_right()
+        flecha_out_end = caja_registro.get_right() + RIGHT * 1.4
+        flecha_out = Arrow(start=flecha_out_start, end=flecha_out_end, buff=0, color=color_texto, stroke_width=4, max_tip_length_to_length_ratio=0.15)
+        
+        label_out = Text("out", font=fuente, font_size=22, color=color_texto).next_to(flecha_out, UP, buff=0.12).shift(RIGHT*0.3)
+        slash_out = Line(DOWN, UP, color=color_acento, stroke_width=2).scale(0.25).rotate(PI/4).move_to(flecha_out.get_center())
+        txt_16_out = Text("16", font=fuente, font_size=16, color=color_acento).next_to(slash_out, DOWN, buff=0.1)
+
+        flecha_load_start = caja_registro.get_top() + UP * 1.0
+        flecha_load_end = caja_registro.get_top()
+        flecha_load = Arrow(start=flecha_load_start, end=flecha_load_end, buff=0, color=GRAY, stroke_width=3, max_tip_length_to_length_ratio=0.15)
+        label_load = Text("load", font=fuente, font_size=20, color=GRAY).next_to(flecha_load, UP, buff=0.1)
+        grupo_load = VGroup(flecha_load, label_load)
+
+        self.play(FadeIn(fondo_circuito, shift=UP * 0.2))
+        self.play(
+            LaggedStart(
+                Create(caja_registro),
+                Write(txt_registro),
+                Create(reloj),
+                lag_ratio=0.2
+            )
+        )
+        self.next_slide() 
+
+        self.play(
+            GrowArrow(flecha_in),
+            FadeIn(label_in),
+            FadeIn(slash_in),
+            FadeIn(txt_16_in)
+        )
+        self.next_slide() 
+
+        self.play(FadeIn(grupo_load, shift=DOWN * 0.1))
+        self.next_slide() 
+
+        paquete_entrada = Square(side_length=0.1, color=DARK_GRAY, fill_opacity=1).move_to(flecha_in_start)
+        paquete_salida = Square(side_length=0.1, color=DARK_GRAY, fill_opacity=1).move_to(flecha_out_start)
+
+        self.play(
+            label_load.animate.set_color(color_texto),
+            flecha_load.animate.set_color(color_texto),
+            FadeIn(paquete_entrada),
+            paquete_entrada.animate.move_to(flecha_in_end + RIGHT*0.2), 
+            run_time=1
+        )
+        self.next_slide() 
+
+        self.play(
+            FadeOut(paquete_entrada), 
+            GrowArrow(flecha_out),
+            FadeIn(label_out),
+            FadeIn(slash_out),
+            FadeIn(txt_16_out),
+            paquete_salida.animate.move_to(flecha_out_end), 
+            run_time=1.5
+        )
+        
+        self.next_slide()
+        self.play(
+            *[FadeOut(mob) for mob in self.mobjects]
+        )
+
+    def slide_cache(self):
+        fuente = "sans-serif"
+        color_texto = BLACK
+        color_secundario = DARK_GRAY
+        color_acento = GRAY
+        
+        color_cpu = "#E0E0E0"      
+        color_cache = "#B0B0B0"   
+        color_memoria = "#D0D0D0" 
+
+        titulo = Text(
+            "Cache", 
+            font=fuente, font_size=45, color=color_texto, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+        
+        linea_subtitulo = Line(LEFT, RIGHT, color=color_acento, stroke_width=2).scale(2).next_to(titulo, DOWN, buff=0.1)
+
+        self.play(Write(titulo))
+        self.play(Create(linea_subtitulo))
+        self.next_slide() 
+
+        viñetas = [
+            "  - Unidad de memoria pequeña y muy rápida.",
+            "  - Ubicada estratégicamente cerca de la CPU.",
+            "  - Almacena datos e instrucciones recientes.",
+            "  - Evita viajes lentos a la Memoria Principal.",
+            "  - Minimiza drásticamente el tiempo de acceso."
+        ]
+        
+        grupo_texto = VGroup(
+            *[Text(linea, font=fuente, font_size=20, color=color_secundario) for linea in viñetas]
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+
+        linea_acento_texto = Line(
+            grupo_texto.get_corner(UL) + UP*0.1, 
+            grupo_texto.get_corner(DL) + DOWN*0.1, 
+            color=color_acento, stroke_width=4
+        )
+        grupo_izquierdo = VGroup(linea_acento_texto, grupo_texto).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
+
+        self.play(Create(linea_acento_texto))
+
+        self.play(LaggedStart(*[FadeIn(texto, shift=RIGHT * 0.1) for texto in grupo_texto], lag_ratio=0.3))
+        self.next_slide() 
+
+        centro_x = 3.5
+        
+        caja_cpu = RoundedRectangle(width=3.5, height=1.0, corner_radius=0.1, fill_color=color_cpu, fill_opacity=1, stroke_width=2, stroke_color=color_texto)
+        caja_cpu.move_to([centro_x, 1.6, 0])
+        txt_cpu = Text("CPU", font=fuente, font_size=24, color=color_texto, weight=BOLD).move_to(caja_cpu)
+        grupo_cpu = VGroup(caja_cpu, txt_cpu)
+
+        caja_mem = RoundedRectangle(width=5.0, height=1.2, corner_radius=0.1, fill_color=color_memoria, fill_opacity=1, stroke_width=2, stroke_color=color_texto)
+        caja_mem.move_to([centro_x, -1.8, 0])
+        txt_mem = Text("Memoria Principal", font=fuente, font_size=22, color=color_texto, weight=BOLD).move_to(caja_mem)
+        grupo_mem = VGroup(caja_mem, txt_mem)
+
+
+        caja_cache = RoundedRectangle(width=2.5, height=1.0, corner_radius=0.1, fill_color=color_cache, fill_opacity=1, stroke_width=2, stroke_color=color_texto)
+        caja_cache.move_to([centro_x, -0.1, 0])
+        txt_cache = Text("Caché", font=fuente, font_size=24, color=color_texto, weight=BOLD).move_to(caja_cache)
+        grupo_cache = VGroup(caja_cache, txt_cache)
+
+        flecha_bloques = DoubleArrow(start=caja_mem.get_top(), end=caja_cache.get_bottom(), buff=0.1, color=color_texto, stroke_width=3)
+        txt_flecha_bloques = Text("Transferencia\nde Bloques", font=fuente, font_size=16, color=color_secundario, line_spacing=0.8).next_to(flecha_bloques, RIGHT, buff=0.2)
+        
+        flecha_palabras = DoubleArrow(start=caja_cache.get_top(), end=caja_cpu.get_bottom(), buff=0.1, color=color_texto, stroke_width=3)
+        txt_flecha_palabras = Text("Transferencia\nde Palabras", font=fuente, font_size=16, color=color_secundario, line_spacing=0.8).next_to(flecha_palabras, RIGHT, buff=0.2)
+
+        self.play(FadeIn(grupo_cpu, shift=DOWN*0.2))
+        self.play(FadeIn(grupo_mem, shift=UP*0.2))
+        self.next_slide()
+
+        self.play(FadeIn(grupo_cache, scale=0.8))
+        self.next_slide()
+
+        self.play(GrowArrow(flecha_bloques), FadeIn(txt_flecha_bloques))
+        
+
+        bloque = VGroup(*[Square(side_length=0.15, fill_color=DARK_GRAY, fill_opacity=1) for _ in range(3)]).arrange(RIGHT, buff=0.05)
+        bloque.move_to(caja_mem.get_top())
+        
+        self.play(FadeIn(bloque))
+        self.play(bloque.animate.move_to(caja_cache.get_bottom()), run_time=1.5)
+        self.play(FadeOut(bloque))
+        self.next_slide() 
+
+        self.play(GrowArrow(flecha_palabras), FadeIn(txt_flecha_palabras))
+
+        palabra = Square(side_length=0.15, fill_color=BLACK, fill_opacity=1)
+        palabra.move_to(caja_cache.get_top())
+        
+        self.play(FadeIn(palabra))
+        self.play(palabra.animate.move_to(caja_cpu.get_bottom()), run_time=0.6)
+        self.play(FadeOut(palabra))
+        
+        self.next_slide()
+        self.play(
+            *[FadeOut(mob) for mob in self.mobjects]
+        )
+    def slide_ram(self):
+        fuente = "sans-serif"
+        color_texto = BLACK
+        color_secundario = DARK_GRAY
+        color_acento = GRAY
+        color_bg_suave = "#F4F4F4"
+        titulo = Text(
+            "RAM (Random Access Memory)", 
+            font=fuente, font_size=42, color=color_texto, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+        
+        linea_subtitulo = Line(LEFT, RIGHT, color=color_acento, stroke_width=2).scale(2.5).next_to(titulo, DOWN, buff=0.1)
+
+        self.play(Write(titulo))
+        self.play(Create(linea_subtitulo))
+        self.next_slide() 
+
+        viñetas = [
+            "  - Es la memoria principal del sistema.",
+            "  - Mayor capacidad que la caché,",
+            "    pero con una velocidad menor.",
+            "  - Almacena los datos e instrucciones",
+            "    que la CPU utiliza en ese momento.",
+            "  - Acceso directo a cualquier dirección."
+        ]
+        
+        grupo_texto = VGroup(
+            *[Text(linea, font=fuente, font_size=20, color=color_secundario) for linea in viñetas]
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+
+        linea_acento_texto = Line(
+            grupo_texto.get_corner(UL) + UP*0.1, 
+            grupo_texto.get_corner(DL) + DOWN*0.1, 
+            color=color_acento, stroke_width=4
+        )
+        grupo_izquierdo = VGroup(linea_acento_texto, grupo_texto).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+
+        self.play(Create(linea_acento_texto))
+        self.play(LaggedStart(*[FadeIn(texto, shift=RIGHT * 0.1) for texto in grupo_texto], lag_ratio=0.15))
+        self.next_slide() 
+
+        centro_diag = RIGHT * 3.5 + DOWN * 0.3
+        
+        fondo_circuito = RoundedRectangle(
+            width=5.5, height=5.5, corner_radius=0.2,
+            fill_color=color_bg_suave, fill_opacity=0.6, 
+            stroke_width=2, stroke_color=GRAY
+        ).move_to(centro_diag)
+
+        caja_ram = RoundedRectangle(
+            width=3.2, height=4.6, corner_radius=0.1,
+            fill_color=WHITE, fill_opacity=1, 
+            stroke_width=3, stroke_color=color_texto
+        ).move_to(centro_diag)
+        
+        txt_ram = Text("RAM", font=fuente, font_size=22, color=color_texto, weight=BOLD).move_to(caja_ram.get_top() + DOWN * 0.4)
+        
+        reloj = Triangle(color=color_texto, fill_opacity=0, stroke_width=2)
+        reloj.stretch_to_fit_width(0.3)
+        reloj.stretch_to_fit_height(0.2) 
+        reloj.next_to(caja_ram.get_bottom(), UP, buff=0)
+
+
+        def crear_registro(y_offset, texto_num):
+            caja_reg = Rectangle(width=2.0, height=0.5, stroke_width=2, stroke_color=color_texto).move_to(caja_ram.get_center() + UP * y_offset)
+            txt_reg = Text("Register", font=fuente, font_size=16, color=color_texto).move_to(caja_reg)
+            num_reg = Text(texto_num, font=fuente, font_size=16, color=color_texto).next_to(caja_reg, RIGHT, buff=0.2)
+            return VGroup(caja_reg, txt_reg, num_reg)
+
+        reg_0 = crear_registro(1.1, "0")
+        reg_1 = crear_registro(0.4, "1")
+        puntos = Text("...", font=fuente, font_size=24, color=color_texto).move_to(caja_ram.get_center() + DOWN * 0.3)
+        reg_n = crear_registro(-1.0, "n-1")
+
+        grupo_registros = VGroup(reg_0, reg_1, puntos, reg_n)
+
+
+        caja_logica = Rectangle(width=2.2, height=0.7, stroke_width=2, stroke_color=color_texto).move_to(caja_ram.get_bottom() + UP * 0.6)
+        
+        txt_logica = VGroup(
+            Text("Direct Access", font=fuente, font_size=14, color=color_texto),
+            Text("Logic", font=fuente, font_size=14, color=color_texto)
+        ).arrange(DOWN, buff=0.05).move_to(caja_logica)
+        
+        grupo_logica = VGroup(caja_logica, txt_logica)
+
+        def crear_bus(start, end, label_text, width_text, up_shift=0.12, left_shift=0, right_shift=0):
+            flecha = Arrow(start=start, end=end, buff=0, color=color_texto, stroke_width=3, max_tip_length_to_length_ratio=0.15)
+            label = Text(label_text, font=fuente, font_size=18, color=color_texto).next_to(flecha, UP, buff=up_shift).shift(LEFT*left_shift + RIGHT*right_shift)
+            slash = Line(DOWN, UP, color=color_acento, stroke_width=2).scale(0.2).rotate(PI/4).move_to(flecha.get_center())
+            width_lbl = Text(width_text, font=fuente, font_size=14, color=color_acento).next_to(slash, DOWN, buff=0.1)
+            return VGroup(flecha, label, slash, width_lbl)
+
+        # Bus in (Datos)
+        y_in = caja_ram.get_center()[1] + 0.6
+        bus_in = crear_bus(caja_ram.get_left() + LEFT * 1.2 + UP * y_in, caja_ram.get_left() + UP * y_in, "in", "w", left_shift=0.3)
+
+        # Bus address
+        y_addr = caja_ram.get_center()[1] - 0.6
+        bus_addr = crear_bus(caja_ram.get_left() + LEFT * 1.2 + UP * y_addr, caja_ram.get_left() + UP * y_addr, "address", "k", left_shift=0.3)
+
+        # Bus out
+        bus_out = crear_bus(caja_ram.get_right(), caja_ram.get_right() + RIGHT * 1.2, "out", "w", right_shift=0.3)
+
+        # Señal load
+        flecha_load = Arrow(start=caja_ram.get_top() + UP * 0.8, end=caja_ram.get_top(), buff=0, color=GRAY, stroke_width=3, max_tip_length_to_length_ratio=0.15)
+        label_load = Text("load", font=fuente, font_size=18, color=GRAY).next_to(flecha_load, UP, buff=0.1)
+        grupo_load = VGroup(flecha_load, label_load)
+
+        self.play(FadeIn(fondo_circuito, shift=UP * 0.2))
+        self.play(Create(caja_ram), Write(txt_ram), Create(reloj))
+        self.next_slide()
+        self.play(LaggedStart(*[FadeIn(mob, shift=DOWN*0.1) for mob in [reg_0, reg_1, puntos, reg_n]], lag_ratio=0.2))
+        self.next_slide() 
+        self.play(Create(caja_logica), Write(txt_logica))
+        self.play(FadeIn(bus_addr, shift=RIGHT*0.2))
+        self.next_slide() 
+        self.play(
+            FadeIn(bus_in, shift=RIGHT*0.2),
+            FadeIn(bus_out, shift=LEFT*0.2),
+            FadeIn(grupo_load, shift=DOWN*0.2)
+        )
+        self.next_slide() 
+
+        self.play(
+            *[FadeOut(mob) for mob in self.mobjects]
+        )
+    def slide_ram_escalabilidad(self):
+        fuente = "sans-serif"
+        color_texto = BLACK
+        color_secundario = DARK_GRAY
+        color_acento = GRAY
+        
+        titulo = Text(
+            "Escalabilidad: Construyendo RAMs más grandes", 
+            font=fuente, font_size=38, color=color_texto, weight=BOLD
+        ).to_edge(UP, buff=0.4)
+        
+        linea_subtitulo = Line(LEFT, RIGHT, color=color_acento, stroke_width=2).scale(3).next_to(titulo, DOWN, buff=0.1)
+
+        self.play(Write(titulo))
+        self.play(Create(linea_subtitulo))
+        self.next_slide() 
+
+        ram8_base = VGroup(
+            RoundedRectangle(width=2.5, height=0.6, corner_radius=0.1, fill_color="#E0E0E0", fill_opacity=1, stroke_color=color_texto),
+            Text("RAM8", font=fuente, font_size=18, color=color_texto, weight=BOLD)
+        ).shift(LEFT * 3)
+
+        self.play(FadeIn(ram8_base, shift=UP*0.2))
+        self.next_slide() 
+
+        ram8_blocks = VGroup(*[
+            VGroup(
+                RoundedRectangle(width=2.5, height=0.4, corner_radius=0.1, fill_color="#E0E0E0", fill_opacity=1, stroke_color=color_texto),
+                Text(f"RAM8 (Chip {i})", font=fuente, font_size=14, color=color_secundario)
+            ) for i in range(8)
+        ]).arrange(DOWN, buff=0.1).shift(LEFT * 3 + DOWN * 0.2)
+
+
+        self.play(Transform(ram8_base, ram8_blocks), run_time=1.5)
+        self.next_slide()
+   
+        caja_ram64 = SurroundingRectangle(ram8_blocks, color=color_texto, stroke_width=3, buff=0.2)
+        txt_ram64 = Text("RAM64", font=fuente, font_size=24, color=color_texto, weight=BOLD).next_to(caja_ram64, UP, buff=0.2)
+        
+        self.play(Create(caja_ram64), Write(txt_ram64))
+        self.next_slide()
+
+        tabla = Table(
+            [["RAM8", "8", "3"],
+             ["RAM64", "64", "6"],
+             ["RAM512", "512", "9"],
+             ["RAM4K", "4096", "12"],
+             ["RAM16K", "16384", "14"]],
+            col_labels=[Text("Chip Name", font=fuente, font_size=24), 
+                        Text("n (Registros)", font=fuente, font_size=24), 
+                        Text("k (Bits Address)", font=fuente, font_size=24)],
+            include_outer_lines=True,
+            line_config={"stroke_width": 2, "color": color_secundario}
+        ).scale(0.35).to_edge(RIGHT, buff=0.8).shift(DOWN * 0.2)
+
+        tabla.get_col_labels().set_color(BLACK)
+        for elem in tabla.get_entries():
+            elem.set_color(DARK_GRAY)
+
+        self.play(FadeIn(tabla, shift=LEFT*0.3))
+        self.next_slide()
+
+        explicacion_k = VGroup(
+            Text("Al multiplicar n x 8", font=fuente, font_size=18, color=color_texto, weight=BOLD),
+            Text("sumamos 3 bits a k", font=fuente, font_size=18, color=color_acento)
+        ).arrange(DOWN, buff=0.1).next_to(tabla, DOWN, buff=0.4)
+        
+        flecha_explicacion = Arrow(start=explicacion_k.get_top(), end=tabla.get_bottom(), buff=0.1, color=color_acento)
+
+        self.play(FadeIn(explicacion_k), GrowArrow(flecha_explicacion))
+        self.next_slide()
+
+        self.play(
+            *[FadeOut(mob) for mob in self.mobjects]
+        )
