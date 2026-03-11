@@ -21,11 +21,14 @@ class Presentacion(Slide):
         self.slide_ram_escalabilidad()
 
         self.slide_simulador_nand2tetris()
-        
+
         self.slide_caracteristicas()
         self.slide_ventajas()
         self.slide_desventajas()
+
         self.slide_memory_standards()
+
+        self.slide_despedida()
 
     def crear_titulo(self, texto, palabra_clave=None, color_clave=DARK_GRAY, font_size=42):
         t2c = {palabra_clave: color_clave} if palabra_clave else {}
@@ -1010,31 +1013,27 @@ class Presentacion(Slide):
         self.next_slide() 
         self.limpiar_pantalla()
     def slide_caracteristicas(self):
-        titulo, linea = self.crear_titulo("Características de la jerarquía", palabra_clave="Características")
+        titulo, linea = self.crear_titulo("Características de la jerarquía", palabra_clave="Características", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
-        
         txt_cap = (
             "Es el volumen global de información\n"
             "que la memoria puede almacenar.\n"
             "A medida que bajamos en la jerarquía,\n"
             "la capacidad de almacenamiento aumenta."
         )
-        
         txt_tie = (
             "Intervalo entre la solicitud de lectura/\n"
             "escritura y la entrega de los datos.\n"
             "A medida que bajamos en la jerarquía,\n"
             "el tiempo de acceso también aumenta."
         )
-        
         txt_ren = (
             "Asegura que los datos de acceso\n"
             "frecuente estén en memorias más\n"
             "rápidas para mejorar significativamente\n"
             "el rendimiento general del sistema."
         )
-        
         txt_cos = (
             "Al avanzar de abajo hacia arriba,\n"
             "el costo aumenta. La memoria interna\n"
@@ -1042,193 +1041,33 @@ class Presentacion(Slide):
             "que la memoria externa."
         )
 
-        icon_cap = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.6, height=0.2, fill_color=BLUE_D, fill_opacity=0.6, stroke_color=BLUE_D) for _ in range(3)]).arrange(UP, buff=0.1)
+        icon_cap = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.6, height=0.2, fill_color=GRAY, fill_opacity=0.8, stroke_color=BLACK, stroke_width=2) for _ in range(3)]).arrange(UP, buff=0.1)
         
-        reloj_base = Circle(radius=0.3, color=RED_D, stroke_width=3)
-        manecilla = Line(reloj_base.get_center(), reloj_base.get_center() + UP*0.2, color=RED_D, stroke_width=3)
+        reloj_base = Circle(radius=0.3, color=BLACK, stroke_width=4)
+        manecilla = Line(reloj_base.get_center(), reloj_base.get_center() + UP*0.2, color=DARK_GRAY, stroke_width=4)
         icon_tie = VGroup(reloj_base, manecilla)
         
-        icon_ren = Star(n=5, outer_radius=0.3, inner_radius=0.15, color=ORANGE, fill_opacity=0.8, stroke_width=1)
+        icon_ren = Star(n=5, outer_radius=0.3, inner_radius=0.15, color=BLACK, fill_opacity=0.8, stroke_width=1)
         
-        icon_cos = Text("$", font=FUENTE, font_size=36, color=GREEN_D, weight=BOLD)
+        icon_cos = Text("$", font=FUENTE, font_size=36, color=BLACK, weight=BOLD)
 
         datos = [
-            ("Capacidad", txt_cap, icon_cap, BLUE_D),
-            ("Tiempo de Acceso", txt_tie, icon_tie, RED_D),
-            ("Rendimiento", txt_ren, icon_ren, ORANGE),
-            ("Costo por bit", txt_cos, icon_cos, GREEN_D)
+            ("Capacidad", txt_cap, icon_cap),
+            ("Tiempo de Acceso", txt_tie, icon_tie),
+            ("Rendimiento", txt_ren, icon_ren),
+            ("Costo por bit", txt_cos, icon_cos)
         ]
 
         tarjetas_finales = VGroup()
         
-        for tit, txt, icono, color in datos:
-            caja = RoundedRectangle(width=6.6, height=2.2, corner_radius=0.2, 
-                                    fill_color=color, fill_opacity=0.05, 
-                                    stroke_color=color, stroke_width=2)
-
-            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=color)
-            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=BLACK, line_spacing=0.8)
-            grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-
-            icono_obj = icono.copy()
-
-            contenido = VGroup(icono_obj, grupo_txt).arrange(RIGHT, buff=0.4)
-            tarjeta = VGroup(caja, contenido)
-            contenido.move_to(caja.get_center())
-            
-            tarjetas_finales.add(tarjeta)
-
-        tarjetas_finales.arrange_in_grid(rows=2, cols=2, buff=0.3).shift(DOWN*0.3)
-
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.4).move_to(DOWN * 0.3)
-
-            caja = tarjeta_centro[0]
-            icono_clon = tarjeta_centro[1][0]
-            textos_clon = tarjeta_centro[1][1]
-            
-            self.play(FadeIn(caja), FadeIn(textos_clon), GrowFromCenter(icono_clon))
-
-            if i == 0: 
-                self.play(LaggedStart(*[Indicate(rect, color=BLUE_E, scale_factor=1.2) for rect in icono_clon], lag_ratio=0.2))
-            elif i == 1: 
-                centro_reloj = icono_clon[0].get_center()
-                self.play(Rotate(icono_clon[1], angle=-4*PI, about_point=centro_reloj, run_time=1.5, rate_func=smooth))
-            elif i == 2: 
-                self.play(Wiggle(icono_clon, scale_value=1.3, rotation_angle=0.1*PI, run_time=1.5))
-            elif i == 3: 
-                self.play(icono_clon.animate.shift(UP*0.2).scale(1.2), rate_func=there_and_back, run_time=1.5)
-                
-            self.next_slide()
-            
-            self.play(FadeOut(tarjeta_centro, scale=0.8))
-
-        self.play(LaggedStart(*[FadeIn(t, shift=UP*0.2) for t in tarjetas_finales], lag_ratio=0.15))
-        self.next_slide() 
-        
-        self.limpiar_pantalla()
-
-    def slide_ventajas(self):
-        titulo, linea = self.crear_titulo("Ventajas de la jerarquía", palabra_clave="Ventajas", color_clave=TEAL_E)
-        self.play(Write(titulo), Create(linea))
-
-        txt_rend = "Almacena datos frecuentes en memorias rápidas (como la caché),\nreduciendo drásticamente el tiempo de acceso del sistema."
-        txt_rent = "Equilibra el costo y la velocidad combinando memorias pequeñas\ny rápidas con almacenamiento grande, ahorrando dinero al consumidor."
-        txt_util = "Aprovecha las fortalezas de cada tecnología para maximizar\nel desempeño sin cuellos de botella."
-        txt_gest = "Mantiene la información crítica cerca de la CPU y relega\nlos datos de menor uso a memorias masivas más lentas."
-
-        icon_rend = VGroup(
-            Line(UR, DL, color=YELLOW_D, stroke_width=5),
-            Line(DL, RIGHT*0.5+DOWN*0.5, color=YELLOW_D, stroke_width=5),
-            Line(RIGHT*0.5+DOWN*0.5, DOWN*1.5+LEFT*0.5, color=YELLOW_D, stroke_width=5)
-        ).scale(0.4).center()
-
-        icon_rent = VGroup(*[Ellipse(width=0.8, height=0.3, color=GREEN_E, fill_opacity=0.5).shift(UP*0.15*i) for i in range(4)])
-        icon_rent.move_to(ORIGIN)
-
-        icon_util = Star(n=8, outer_radius=0.4, inner_radius=0.3, color=TEAL_D, fill_opacity=0.8)
-
-        icon_gest = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.8, height=0.25, fill_color=PURPLE_D, fill_opacity=0.8, stroke_color=WHITE, stroke_width=1) for _ in range(3)]).arrange(DOWN, buff=0.1)
-
-        datos = [
-            ("Rendimiento", txt_rend, icon_rend, YELLOW_D),
-            ("Rentabilidad", txt_rent, icon_rent, GREEN_E),
-            ("Utilización optimizada", txt_util, icon_util, TEAL_D),
-            ("Gestión eficiente", txt_gest, icon_gest, PURPLE_D)
-        ]
-
-        banners_finales = VGroup()
-        
-        for tit, txt, icono, color in datos:
-            caja = RoundedRectangle(width=10, height=1.3, corner_radius=0.2, 
-                                    fill_color=color, fill_opacity=0.1, 
-                                    stroke_color=color, stroke_width=2)
-            
-            lbl_tit = Text(tit, font=FUENTE, font_size=22, weight=BOLD, color=color)
-            lbl_txt = Text(txt, font=FUENTE, font_size=15, color=DARK_GRAY, line_spacing=0.8)
-            grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-            
-
-            fondo_icono = Circle(radius=0.5, fill_color=WHITE, fill_opacity=1, stroke_color=color, stroke_width=2)
-            icono_con_fondo = VGroup(fondo_icono, icono.copy().move_to(fondo_icono.get_center()))
-            
-            contenido = VGroup(icono_con_fondo, grupo_txt).arrange(RIGHT, buff=0.5)
-            contenido.move_to(caja.get_center()).align_to(caja, LEFT).shift(RIGHT*0.5) 
-            
-            banner = VGroup(caja, contenido)
-            banners_finales.add(banner)
-            
-        banners_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
-
-        for i, banner_base in enumerate(banners_finales):
-            banner_centro = banner_base.copy().scale(1.1).move_to(DOWN * 0.2)
-            
-            caja = banner_centro[0]
-            icono_grupo = banner_centro[1][0] 
-            icono_simbolo = icono_grupo[1] 
-            textos = banner_centro[1][1]
-            
-            self.play(FadeIn(caja, shift=RIGHT), FadeIn(textos, shift=RIGHT), GrowFromCenter(icono_grupo))
-            
-            if i == 0:
-                self.play(Flash(icono_simbolo, color=YELLOW_D, line_length=0.2, num_lines=6), Indicate(icono_simbolo, scale_factor=1.3))
-            elif i == 1: 
-                self.play(LaggedStart(*[m.animate.shift(DOWN*0.1) for m in reversed(icono_simbolo)], lag_ratio=0.2, rate_func=there_and_back))
-            elif i == 2: 
-                self.play(Rotate(icono_simbolo, angle=PI, run_time=1.5, rate_func=smooth))
-            elif i == 3: 
-                self.play(LaggedStart(*[Wiggle(m, scale_value=1.1, rotation_angle=0.05*PI) for m in icono_simbolo], lag_ratio=0.1))
-                
-            self.next_slide() 
-            self.play(FadeOut(banner_centro, shift=LEFT*0.5))
-
-        self.play(LaggedStart(*[FadeIn(b, shift=DOWN*0.3) for b in banners_finales], lag_ratio=0.15))
-        self.next_slide() 
-        
-        self.limpiar_pantalla()
-
-    def slide_desventajas(self):
-        titulo, linea = self.crear_titulo("Desventajas de la jerarquía", palabra_clave="Desventajas", color_clave=RED_E)
-        self.play(Write(titulo), Create(linea))
-
-        txt_comp = "La gestión y coordinación de datos en\nmúltiples niveles agrega gran complejidad\nal diseño y funcionamiento del sistema."
-        txt_cost = "Las memorias rápidas (registros, caché)\nson muy costosas, lo que limita su tamaño\ny eleva el precio final del equipo."
-        txt_late = "Acceder a datos en niveles inferiores\n(almacenamiento masivo) toma mucho más\ntiempo, creando cuellos de botella."
-        txt_mant = "Administrar y sincronizar distintos\ntipos de memoria genera una sobrecarga\ntanto en hardware como en software."
-
-        nodo1 = Dot(UP*0.2 + LEFT*0.2, color=MAROON)
-        nodo2 = Dot(DOWN*0.2 + LEFT*0.2, color=MAROON)
-        nodo3 = Dot(RIGHT*0.3, color=MAROON)
-        lineas_comp = VGroup(Line(nodo1, nodo2), Line(nodo2, nodo3), Line(nodo3, nodo1)).set_color(MAROON).set_stroke(width=2)
-        icon_comp = VGroup(lineas_comp, nodo1, nodo2, nodo3).scale(1.5)
-
-        icon_cost = Text("$$$", font=FUENTE, font_size=32, color=RED_D, weight=BOLD)
-
-        icon_late = Arc(radius=0.3, angle=1.5*PI, color=ORANGE, stroke_width=4).rotate(PI/4)
-        punto_late = Dot(icon_late.get_start(), color=ORANGE)
-        icon_late_grupo = VGroup(icon_late, punto_late)
-
-        engranaje = Star(n=6, outer_radius=0.35, inner_radius=0.25, color=DARK_GRAY, fill_opacity=0.8)
-        exclamacion = Text("!", font=FUENTE, font_size=24, color=WHITE, weight=BOLD).move_to(engranaje.get_center())
-        icon_mant = VGroup(engranaje, exclamacion)
-
-        datos = [
-            ("Diseño complejo", txt_comp, icon_comp, MAROON),
-            ("Alto Costo", txt_cost, icon_cost, RED_D),
-            ("Latencia", txt_late, icon_late_grupo, ORANGE),
-            ("Gastos de mantenimiento", txt_mant, icon_mant, DARK_GRAY)
-        ]
-
-        tarjetas_finales = VGroup()
-        
-        for i, (tit, txt, icono, color) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.2, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=color, fill_opacity=1, stroke_width=0)
+        for i, (tit, txt, icono) in enumerate(datos):
+            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
+            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
             borde_izq.align_to(base, LEFT)
             caja = VGroup(base, borde_izq)
             
-            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=color)
-            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=BLACK, line_spacing=0.8)
+            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             
             contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
@@ -1255,7 +1094,175 @@ class Presentacion(Slide):
             self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
             
             if i == 0: 
-                self.play(LaggedStart(*[Indicate(n, scale_factor=1.5, color=RED) for n in icono_grupo[1:]], lag_ratio=0.3))
+                self.play(LaggedStart(*[Indicate(rect, color=BLACK, scale_factor=1.2) for rect in icono_grupo], lag_ratio=0.2))
+            elif i == 1: 
+                centro_reloj = icono_grupo[0].get_center()
+                self.play(Rotate(icono_grupo[1], angle=-4*PI, about_point=centro_reloj, run_time=1.5, rate_func=smooth))
+            elif i == 2: 
+                self.play(Wiggle(icono_grupo, scale_value=1.3, rotation_angle=0.1*PI, run_time=1.5))
+            elif i == 3: 
+                self.play(icono_grupo.animate.shift(UP*0.2).scale(1.2), rate_func=there_and_back, run_time=1.5)
+                
+            self.next_slide() 
+            
+            direccion_salida = RIGHT if i % 2 == 0 else LEFT
+            self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
+
+        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
+        self.next_slide() 
+        self.limpiar_pantalla()
+
+    def slide_ventajas(self):
+        titulo, linea = self.crear_titulo("Ventajas de la jerarquía", palabra_clave="Ventajas", color_clave=BLACK)
+        self.play(Write(titulo), Create(linea))
+
+        txt_rend = "Almacena datos frecuentes en memorias rápidas (como la caché),\nreduciendo drásticamente el tiempo de acceso del sistema."
+        txt_rent = "Equilibra el costo y la velocidad combinando memorias pequeñas\ny rápidas con almacenamiento grande, ahorrando dinero al consumidor."
+        txt_util = "Aprovecha las fortalezas de cada tecnología para maximizar\nel desempeño sin cuellos de botella."
+        txt_gest = "Mantiene la información crítica cerca de la CPU y relega\nlos datos de menor uso a memorias masivas más lentas."
+
+        icon_rend = VGroup(
+            Line(UR, DL, color=BLACK, stroke_width=6),
+            Line(DL, RIGHT*0.5+DOWN*0.5, color=BLACK, stroke_width=6),
+            Line(RIGHT*0.5+DOWN*0.5, DOWN*1.5+LEFT*0.5, color=BLACK, stroke_width=6)
+        ).scale(0.4).center()
+
+        icon_rent = VGroup(*[Ellipse(width=0.8, height=0.3, color=DARK_GRAY, fill_opacity=0.6).shift(UP*0.15*i) for i in range(4)])
+        icon_rent.move_to(ORIGIN)
+
+        icon_util = Star(n=8, outer_radius=0.4, inner_radius=0.3, color=BLACK, fill_opacity=0.8)
+
+        icon_gest = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.8, height=0.25, fill_color=DARK_GRAY, fill_opacity=0.8, stroke_color=BLACK, stroke_width=2) for _ in range(3)]).arrange(DOWN, buff=0.1)
+
+        datos = [
+            ("Rendimiento", txt_rend, icon_rend),
+            ("Rentabilidad", txt_rent, icon_rent),
+            ("Utilización optimizada", txt_util, icon_util),
+            ("Gestión eficiente", txt_gest, icon_gest)
+        ]
+
+        tarjetas_finales = VGroup()
+        
+        for i, (tit, txt, icono) in enumerate(datos):
+            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
+            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
+            borde_izq.align_to(base, LEFT)
+            caja = VGroup(base, borde_izq)
+            
+            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
+            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
+            contenido.move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
+            
+            tarjeta = VGroup(caja, contenido)
+            tarjetas_finales.add(tarjeta)   
+        
+        tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
+        for i, tarjeta in enumerate(tarjetas_finales):
+            if i % 2 == 0:
+                tarjeta.shift(LEFT * 1.5)
+            else:
+                tarjeta.shift(RIGHT * 1.5)
+
+        for i, tarjeta_base in enumerate(tarjetas_finales):
+            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
+            
+            caja = tarjeta_centro[0]
+            icono_grupo = tarjeta_centro[1][0]
+            textos = tarjeta_centro[1][1]
+            
+            direccion_entrada = LEFT if i % 2 == 0 else RIGHT
+            self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
+            
+            if i == 0:
+                self.play(Flash(icono_grupo, color=BLACK, line_length=0.2, num_lines=6), Indicate(icono_grupo, color=BLACK, scale_factor=1.3))
+            elif i == 1: 
+                self.play(LaggedStart(*[m.animate.shift(DOWN*0.1) for m in reversed(icono_grupo)], lag_ratio=0.2, rate_func=there_and_back))
+            elif i == 2: 
+                self.play(Rotate(icono_grupo, angle=PI, run_time=1.5, rate_func=smooth))
+            elif i == 3: 
+                self.play(LaggedStart(*[Wiggle(m, scale_value=1.1, rotation_angle=0.05*PI) for m in icono_grupo], lag_ratio=0.1))
+                
+            self.next_slide() 
+            
+            direccion_salida = RIGHT if i % 2 == 0 else LEFT
+            self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
+
+        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
+        self.next_slide() 
+        self.limpiar_pantalla()
+
+    def slide_desventajas(self):
+        titulo, linea = self.crear_titulo("Desventajas de la jerarquía", palabra_clave="Desventajas", color_clave=BLACK)
+        self.play(Write(titulo), Create(linea))
+
+        txt_comp = "La gestión y coordinación de datos en\nmúltiples niveles agrega gran complejidad\nal diseño y funcionamiento del sistema."
+        txt_cost = "Las memorias rápidas (registros, caché)\nson muy costosas, lo que limita su tamaño\ny eleva el precio final del equipo."
+        txt_late = "Acceder a datos en niveles inferiores\n(almacenamiento masivo) toma mucho más\ntiempo, creando cuellos de botella."
+        txt_mant = "Administrar y sincronizar distintos\ntipos de memoria genera una sobrecarga\ntanto en hardware como en software."
+
+        nodo1 = Dot(UP*0.2 + LEFT*0.2, color=BLACK)
+        nodo2 = Dot(DOWN*0.2 + LEFT*0.2, color=BLACK)
+        nodo3 = Dot(RIGHT*0.3, color=BLACK)
+        lineas_comp = VGroup(Line(nodo1, nodo2), Line(nodo2, nodo3), Line(nodo3, nodo1)).set_color(DARK_GRAY).set_stroke(width=3)
+        icon_comp = VGroup(lineas_comp, nodo1, nodo2, nodo3).scale(1.5)
+
+        icon_cost = Text("$$$", font=FUENTE, font_size=32, color=BLACK, weight=BOLD)
+
+        icon_late = Arc(radius=0.3, angle=1.5*PI, color=BLACK, stroke_width=5).rotate(PI/4)
+        punto_late = Dot(icon_late.get_start(), color=BLACK)
+        icon_late_grupo = VGroup(icon_late, punto_late)
+
+        engranaje = Star(n=6, outer_radius=0.35, inner_radius=0.25, color=DARK_GRAY, fill_opacity=0.8)
+        exclamacion = Text("!", font=FUENTE, font_size=24, color=WHITE, weight=BOLD).move_to(engranaje.get_center())
+        icon_mant = VGroup(engranaje, exclamacion)
+
+        datos = [
+            ("Diseño complejo", txt_comp, icon_comp),
+            ("Alto Costo", txt_cost, icon_cost),
+            ("Latencia", txt_late, icon_late_grupo),
+            ("Gastos de mantenimiento", txt_mant, icon_mant)
+        ]
+
+        tarjetas_finales = VGroup()
+        
+        for i, (tit, txt, icono) in enumerate(datos):
+            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
+            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
+            borde_izq.align_to(base, LEFT)
+            caja = VGroup(base, borde_izq)
+            
+            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
+            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
+            contenido.move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
+            
+            tarjeta = VGroup(caja, contenido)
+            tarjetas_finales.add(tarjeta)   
+        
+        tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
+        for i, tarjeta in enumerate(tarjetas_finales):
+            if i % 2 == 0:
+                tarjeta.shift(LEFT * 1.5)
+            else:
+                tarjeta.shift(RIGHT * 1.5)
+
+        for i, tarjeta_base in enumerate(tarjetas_finales):
+            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
+            
+            caja = tarjeta_centro[0]
+            icono_grupo = tarjeta_centro[1][0]
+            textos = tarjeta_centro[1][1]
+            
+            direccion_entrada = LEFT if i % 2 == 0 else RIGHT
+            self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
+            
+            if i == 0: 
+                self.play(LaggedStart(*[Indicate(n, scale_factor=1.5, color=DARK_GRAY) for n in icono_grupo[1:]], lag_ratio=0.3))
             elif i == 1:
                 self.play(Wiggle(icono_grupo, scale_value=1.2, rotation_angle=0.05*PI))
             elif i == 2: 
@@ -1268,12 +1275,45 @@ class Presentacion(Slide):
             direccion_salida = RIGHT if i % 2 == 0 else LEFT
             self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
 
-
         self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
         self.next_slide() 
-        
         self.limpiar_pantalla()
 
+    def slide_despedida(self):
+        texto_muchas = Text("¡MUCHAS", font_size=72, weight=BOLD, slant=ITALIC, color=BLACK)
+        texto_gracias = Text("Gracias!", font_size=72, color=BLACK)
+        
+        texto_muchas.shift(UP * 2.5 + LEFT * 1.5)
+        texto_gracias.next_to(texto_muchas, DOWN, aligned_edge=RIGHT, buff=0.1).shift(RIGHT * 1.5)
+        
+        grupo_texto_principal = VGroup(texto_muchas, texto_gracias)
+        
+        subtitulo = Text("por su atención", font_size=28, color=DARK_GRAY)
+        subtitulo.next_to(grupo_texto_principal, DOWN, buff=0.5)
+
+        qr_image = ImageMobject("assets\memoria_en_computador_moderno_qr.png") 
+        qr_image.height = 3.5 
+        marco_qr = SurroundingRectangle(qr_image, color=BLACK, stroke_width=2, buff=0.1)
+        
+        grupo_qr_completo = Group(marco_qr, qr_image)
+        grupo_qr_completo.next_to(subtitulo, DOWN, buff=0.8)
+
+        # Centrar todo el bloque de contenido en la pantalla
+        contenido_total = Group(grupo_texto_principal, subtitulo, grupo_qr_completo)
+        contenido_total.move_to(ORIGIN)
+
+        self.play(Write(texto_muchas), run_time=1)
+        self.play(FadeIn(texto_gracias, shift=UP * 0.5), run_time=1)
+        self.play(FadeIn(subtitulo))
+        
+        self.play(
+            FadeIn(qr_image, shift=UP * 0.2),
+            Create(marco_qr),
+            run_time=1.5
+        )
+
+        self.next_slide()
+        self.limpiar_pantalla()
     def slide_simulador_nand2tetris(self):
         titulo, linea = self.crear_titulo("Simulador de Nand2tetris", palabra_clave="Nand2tetris", color_clave=BLACK)
         self.play(Write(titulo), GrowFromCenter(linea))
