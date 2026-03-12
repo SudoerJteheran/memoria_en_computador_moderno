@@ -44,19 +44,19 @@ pip install manim-slides
 Renderizar la animación:
 
 ```bash
-manim -pqh presentacion.py PresentacionMemoria
+manim -pqh main.py Presentacion
 ```
 
 Modo presentación con diapositivas:
 
 ```bash
-manim-slides present PresentacionMemoria
+manim_slides present Presentacion
 ```
 
 Exportar a video:
 
 ```bash
-manim -pqh presentacion.py PresentacionMemoria
+manim -pqh main.py Presentacion
 ```
 
 ---
@@ -95,6 +95,8 @@ Nand2Tetris
 
 How Computers Actually Work (Nand2Tetris explanation)
 [https://www.youtube.com/watch?v=feeQk8HNYR4](https://www.youtube.com/watch?v=feeQk8HNYR4)
+
+
 
 ---
 
