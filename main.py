@@ -28,10 +28,8 @@ class Presentacion(Slide):
         self.slide_delay_hdd()
         # self.slide_ventajas_hdd()
         # self.slide_desventajas_hdd()
-        
 
         # self.slide_ssd_unidades()
-        # ## self.slide_ssd_funcionamiento()
         # self.slide_tipos_memoria_flash()
         # self.slide_ventajas_ssd()
         # self.slide_desventajas_ssd()
@@ -44,7 +42,7 @@ class Presentacion(Slide):
 
         # self.slide_memory_standards()
 
-        # self.slide_despedida()
+        self.slide_despedida()
 
     def crear_titulo(self, texto, palabra_clave=None, color_clave=DARK_GRAY, font_size=42):
         t2c = {palabra_clave: color_clave} if palabra_clave else {}
@@ -128,7 +126,7 @@ class Presentacion(Slide):
 
         integrantes = VGroup(
             Text("Integrantes:", font=FUENTE, font_size=18, color=BLACK, weight=BOLD),
-            Text("Jerónimo Hoyos B.  |  Juan Manuel Teherán M.  |  Jerónimo Restrepo R.", font=FUENTE, font_size=18, color=DARK_GRAY)
+            Text("Jerónimo Hoyos B. | Juan Manuel Teherán M. | Jerónimo Restrepo R. | Mateo Úsuga Zapata", font=FUENTE, font_size=18, color=DARK_GRAY)
         ).arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.8)
 
         self.play(FadeIn(grupo_enunciado, shift=RIGHT))
@@ -1117,43 +1115,29 @@ class Presentacion(Slide):
         self.limpiar_pantalla()
 
     def slide_caracteristicas(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Características de la jerarquía", palabra_clave="Características", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
-        txt_cap = (
-            "Es el volumen global de información\n"
-            "que la memoria puede almacenar.\n"
-            "A medida que bajamos en la jerarquía,\n"
-            "la capacidad de almacenamiento aumenta."
-        )
-        txt_tie = (
-            "Intervalo entre la solicitud de lectura/\n"
-            "escritura y la entrega de los datos.\n"
-            "A medida que bajamos en la jerarquía,\n"
-            "el tiempo de acceso también aumenta."
-        )
-        txt_ren = (
-            "Asegura que los datos de acceso\n"
-            "frecuente estén en memorias más\n"
-            "rápidas para mejorar significativamente\n"
-            "el rendimiento general del sistema."
-        )
-        txt_cos = (
-            "Al avanzar de abajo hacia arriba,\n"
-            "el costo aumenta. La memoria interna\n"
-            "es sustancialmente más costosa\n"
-            "que la memoria externa."
-        )
+        # Definición de textos
+        txt_cap = "Volumen global de información que se puede almacenar.\nAumenta a medida que bajamos en la jerarquía."
+        txt_tie = "Tiempo entre la solicitud y la entrega de datos.\nTambién aumenta al bajar en los niveles."
+        txt_ren = "Asegura que los datos frecuentes estén en memorias\nmás rápidas para optimizar el sistema global."
+        txt_cos = "El costo por bit aumenta al subir en la pirámide.\nLa memoria interna es la más costosa."
 
-        icon_cap = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.6, height=0.2, fill_color=GRAY, fill_opacity=0.8, stroke_color=BLACK, stroke_width=2) for _ in range(3)]).arrange(UP, buff=0.1)
+        # Iconos en Negro Sólido
+        icon_cap = VGroup(*[
+            RoundedRectangle(corner_radius=0.05, width=0.6, height=0.15, fill_color=BLACK, fill_opacity=1, stroke_width=0) 
+            for _ in range(3)
+        ]).arrange(UP, buff=0.08)
         
-        reloj_base = Circle(radius=0.3, color=BLACK, stroke_width=4)
-        manecilla = Line(reloj_base.get_center(), reloj_base.get_center() + UP*0.2, color=DARK_GRAY, stroke_width=4)
+        reloj_base = Circle(radius=0.3, color=BLACK, stroke_width=3)
+        manecilla = Line(reloj_base.get_center(), reloj_base.get_center() + UP*0.2, color=BLACK, stroke_width=3)
         icon_tie = VGroup(reloj_base, manecilla)
         
-        icon_ren = Star(n=5, outer_radius=0.3, inner_radius=0.15, color=BLACK, fill_opacity=0.8, stroke_width=1)
+        icon_ren = Star(n=5, outer_radius=0.3, inner_radius=0.15, color=BLACK, fill_opacity=1, stroke_width=0)
         
-        icon_cos = Text("$", font=FUENTE, font_size=36, color=BLACK, weight=BOLD)
+        icon_cos = Text("$", font_size=36, color=BLACK, weight=BOLD)
 
         datos = [
             ("Capacidad", txt_cap, icon_cap),
@@ -1164,79 +1148,70 @@ class Presentacion(Slide):
 
         tarjetas_finales = VGroup()
         
-        for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
-            borde_izq.align_to(base, LEFT)
-            caja = VGroup(base, borde_izq)
+        for tit, txt, icono in datos:
+            # Estilo B&W: Fondo blanco, borde negro
+            base = RoundedRectangle(
+                width=9, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral negro
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
             
-            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             
-            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
-            contenido.move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
+            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
             
-            tarjeta = VGroup(caja, contenido)
-            tarjetas_finales.add(tarjeta)   
-        
+            tarjeta = VGroup(base, borde_izq, contenido)
+            tarjetas_finales.add(tarjeta)
+
+        # Organización en columna
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
-        for i, tarjeta in enumerate(tarjetas_finales):
-            if i % 2 == 0:
-                tarjeta.shift(LEFT * 1.5)
-            else:
-                tarjeta.shift(RIGHT * 1.5)
 
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            
-            caja = tarjeta_centro[0]
-            icono_grupo = tarjeta_centro[1][0]
-            textos = tarjeta_centro[1][1]
-            
-            direccion_entrada = LEFT if i % 2 == 0 else RIGHT
-            self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
-            
-            if i == 0: 
-                self.play(LaggedStart(*[Indicate(rect, color=BLACK, scale_factor=1.2) for rect in icono_grupo], lag_ratio=0.2))
-            elif i == 1: 
-                centro_reloj = icono_grupo[0].get_center()
-                self.play(Rotate(icono_grupo[1], angle=-4*PI, about_point=centro_reloj, run_time=1.5, rate_func=smooth))
-            elif i == 2: 
-                self.play(Wiggle(icono_grupo, scale_value=1.3, rotation_angle=0.1*PI, run_time=1.5))
-            elif i == 3: 
-                self.play(icono_grupo.animate.shift(UP*0.2).scale(1.2), rate_func=there_and_back, run_time=1.5)
-                
-            self.next_slide() 
-            
-            direccion_salida = RIGHT if i % 2 == 0 else LEFT
-            self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
+        # Animación: Entrada de todo el listado de una vez
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
-        self.next_slide() 
+        self.next_slide()
         self.limpiar_pantalla()
 
     def slide_ventajas(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Ventajas de la jerarquía", palabra_clave="Ventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Textos
         txt_rend = "Almacena datos frecuentes en memorias rápidas (como la caché),\nreduciendo drásticamente el tiempo de acceso del sistema."
-        txt_rent = "Equilibra el costo y la velocidad combinando memorias pequeñas\ny rápidas con almacenamiento grande, ahorrando dinero al consumidor."
+        txt_rent = "Equilibra el costo y la velocidad combinando memorias pequeñas\ny rápidas con almacenamiento grande, ahorrando dinero."
         txt_util = "Aprovecha las fortalezas de cada tecnología para maximizar\nel desempeño sin cuellos de botella."
         txt_gest = "Mantiene la información crítica cerca de la CPU y relega\nlos datos de menor uso a memorias masivas más lentas."
 
+        # Iconos en Negro Sólido
         icon_rend = VGroup(
             Line(UR, DL, color=BLACK, stroke_width=6),
             Line(DL, RIGHT*0.5+DOWN*0.5, color=BLACK, stroke_width=6),
             Line(RIGHT*0.5+DOWN*0.5, DOWN*1.5+LEFT*0.5, color=BLACK, stroke_width=6)
-        ).scale(0.4).center()
+        ).scale(0.4)
 
-        icon_rent = VGroup(*[Ellipse(width=0.8, height=0.3, color=DARK_GRAY, fill_opacity=0.6).shift(UP*0.15*i) for i in range(4)])
-        icon_rent.move_to(ORIGIN)
+        icon_rent = VGroup(*[
+            Ellipse(width=0.8, height=0.3, color=BLACK, fill_opacity=1).shift(UP*0.15*i) 
+            for i in range(4)
+        ])
 
-        icon_util = Star(n=8, outer_radius=0.4, inner_radius=0.3, color=BLACK, fill_opacity=0.8)
+        icon_util = Star(n=8, outer_radius=0.4, inner_radius=0.3, color=BLACK, fill_opacity=1)
 
-        icon_gest = VGroup(*[RoundedRectangle(corner_radius=0.1, width=0.8, height=0.25, fill_color=DARK_GRAY, fill_opacity=0.8, stroke_color=BLACK, stroke_width=2) for _ in range(3)]).arrange(DOWN, buff=0.1)
+        icon_gest = VGroup(*[
+            RoundedRectangle(corner_radius=0.1, width=0.8, height=0.25, fill_color=BLACK, fill_opacity=1, stroke_width=0) 
+            for _ in range(3)
+        ]).arrange(DOWN, buff=0.1)
 
         datos = [
             ("Rendimiento", txt_rend, icon_rend),
@@ -1247,140 +1222,111 @@ class Presentacion(Slide):
 
         tarjetas_finales = VGroup()
         
-        for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
-            borde_izq.align_to(base, LEFT)
-            caja = VGroup(base, borde_izq)
+        for tit, txt, icono in datos:
+            # Estilo B&W: Fondo blanco y borde negro
+            base = RoundedRectangle(
+                width=9, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral en negro
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
             
-            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             
-            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
-            contenido.move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
+            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
             
-            tarjeta = VGroup(caja, contenido)
-            tarjetas_finales.add(tarjeta)   
-        
+            tarjeta = VGroup(base, borde_izq, contenido)
+            tarjetas_finales.add(tarjeta)
+
+        # Organización de las tarjetas
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
-        for i, tarjeta in enumerate(tarjetas_finales):
-            if i % 2 == 0:
-                tarjeta.shift(LEFT * 1.5)
-            else:
-                tarjeta.shift(RIGHT * 1.5)
 
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            
-            caja = tarjeta_centro[0]
-            icono_grupo = tarjeta_centro[1][0]
-            textos = tarjeta_centro[1][1]
-            
-            direccion_entrada = LEFT if i % 2 == 0 else RIGHT
-            self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
-            
-            if i == 0:
-                self.play(Flash(icono_grupo, color=BLACK, line_length=0.2, num_lines=6), Indicate(icono_grupo, color=BLACK, scale_factor=1.3))
-            elif i == 1: 
-                self.play(LaggedStart(*[m.animate.shift(DOWN*0.1) for m in reversed(icono_grupo)], lag_ratio=0.2, rate_func=there_and_back))
-            elif i == 2: 
-                self.play(Rotate(icono_grupo, angle=PI, run_time=1.5, rate_func=smooth))
-            elif i == 3: 
-                self.play(LaggedStart(*[Wiggle(m, scale_value=1.1, rotation_angle=0.05*PI) for m in icono_grupo], lag_ratio=0.1))
-                
-            self.next_slide() 
-            
-            direccion_salida = RIGHT if i % 2 == 0 else LEFT
-            self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
+        # Animación de entrada: Todo el bloque junto
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
-        self.next_slide() 
+        self.next_slide()
         self.limpiar_pantalla()
 
     def slide_desventajas(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Desventajas de la jerarquía", palabra_clave="Desventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Definición de textos
         txt_comp = "La gestión y coordinación de datos en\nmúltiples niveles agrega gran complejidad\nal diseño y funcionamiento del sistema."
         txt_cost = "Las memorias rápidas (registros, caché)\nson muy costosas, lo que limita su tamaño\ny eleva el precio final del equipo."
         txt_late = "Acceder a datos en niveles inferiores\n(almacenamiento masivo) toma mucho más\ntiempo, creando cuellos de botella."
         txt_mant = "Administrar y sincronizar distintos\ntipos de memoria genera una sobrecarga\ntanto en hardware como en software."
 
+        # Iconos en Negro Sólido
         nodo1 = Dot(UP*0.2 + LEFT*0.2, color=BLACK)
         nodo2 = Dot(DOWN*0.2 + LEFT*0.2, color=BLACK)
         nodo3 = Dot(RIGHT*0.3, color=BLACK)
-        lineas_comp = VGroup(Line(nodo1, nodo2), Line(nodo2, nodo3), Line(nodo3, nodo1)).set_color(DARK_GRAY).set_stroke(width=3)
-        icon_comp = VGroup(lineas_comp, nodo1, nodo2, nodo3).scale(1.5)
+        lineas_comp = VGroup(Line(nodo1, nodo2), Line(nodo2, nodo3), Line(nodo3, nodo1)).set_color(BLACK).set_stroke(width=3)
+        icon_comp = VGroup(lineas_comp, nodo1, nodo2, nodo3).scale(1.2)
 
-        icon_cost = Text("$$$", font=FUENTE, font_size=32, color=BLACK, weight=BOLD)
+        icon_cost = Text("$$$", font_size=32, color=BLACK, weight=BOLD)
 
         icon_late = Arc(radius=0.3, angle=1.5*PI, color=BLACK, stroke_width=5).rotate(PI/4)
         punto_late = Dot(icon_late.get_start(), color=BLACK)
         icon_late_grupo = VGroup(icon_late, punto_late)
 
-        engranaje = Star(n=6, outer_radius=0.35, inner_radius=0.25, color=DARK_GRAY, fill_opacity=0.8)
-        exclamacion = Text("!", font=FUENTE, font_size=24, color=WHITE, weight=BOLD).move_to(engranaje.get_center())
+        engranaje = Star(n=6, outer_radius=0.35, inner_radius=0.25, color=BLACK, fill_opacity=1, stroke_width=0)
+        exclamacion = Text("!", font_size=24, color=WHITE, weight=BOLD).move_to(engranaje.get_center())
         icon_mant = VGroup(engranaje, exclamacion)
 
         datos = [
             ("Diseño complejo", txt_comp, icon_comp),
             ("Alto Costo", txt_cost, icon_cost),
             ("Latencia", txt_late, icon_late_grupo),
-            ("Gastos de mantenimiento", txt_mant, icon_mant)
+            ("Sobrecarga", txt_mant, icon_mant)
         ]
 
         tarjetas_finales = VGroup()
         
-        for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLACK, fill_opacity=1, stroke_width=0)
-            borde_izq.align_to(base, LEFT)
-            caja = VGroup(base, borde_izq)
+        for tit, txt, icono in datos:
+            # Estilo B&W: Fondo blanco y borde negro
+            base = RoundedRectangle(
+                width=9, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral negro
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
             
-            lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font=FUENTE, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             
-            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4)
-            contenido.move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
+            contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
             
-            tarjeta = VGroup(caja, contenido)
-            tarjetas_finales.add(tarjeta)   
-        
+            tarjeta = VGroup(base, borde_izq, contenido)
+            tarjetas_finales.add(tarjeta)
+
+        # Organización en columna
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
-        for i, tarjeta in enumerate(tarjetas_finales):
-            if i % 2 == 0:
-                tarjeta.shift(LEFT * 1.5)
-            else:
-                tarjeta.shift(RIGHT * 1.5)
 
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            
-            caja = tarjeta_centro[0]
-            icono_grupo = tarjeta_centro[1][0]
-            textos = tarjeta_centro[1][1]
-            
-            direccion_entrada = LEFT if i % 2 == 0 else RIGHT
-            self.play(FadeIn(caja, shift=direccion_entrada), FadeIn(textos, shift=direccion_entrada), SpinInFromNothing(icono_grupo))
-            
-            if i == 0: 
-                self.play(LaggedStart(*[Indicate(n, scale_factor=1.5, color=DARK_GRAY) for n in icono_grupo[1:]], lag_ratio=0.3))
-            elif i == 1:
-                self.play(Wiggle(icono_grupo, scale_value=1.2, rotation_angle=0.05*PI))
-            elif i == 2: 
-                self.play(Rotate(icono_grupo, angle=-PI, run_time=2, rate_func=linear))
-            elif i == 3: 
-                self.play(Rotate(icono_grupo, angle=PI/4, run_time=0.5), Rotate(icono_grupo, angle=-PI/8, run_time=0.3), Rotate(icono_grupo, angle=PI/4, run_time=0.5))
-                
-            self.next_slide() 
-            
-            direccion_salida = RIGHT if i % 2 == 0 else LEFT
-            self.play(FadeOut(tarjeta_centro, shift=direccion_salida*0.5))
+        # Animación: Entrada de todo el listado de una vez
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
-        self.next_slide() 
+        self.next_slide()
         self.limpiar_pantalla()
 
     def slide_despedida(self):
@@ -1844,13 +1790,16 @@ class Presentacion(Slide):
         self.limpiar_pantalla()
         
     def slide_ventajas_hdd(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Ventajas del HDD", palabra_clave="Ventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Textos
         txt_cap = "Alta capacidad de almacenamiento (hasta 36TB)\ny una excelente relación costo-beneficio."
         txt_rec = "Retienen información sin energía y cuentan\ncon múltiples herramientas de recuperación."
         txt_com = "Sencillos de expandir o mejorar (swappear),\ncompatibles con casi cualquier sistema."
 
+        # Iconos (Asegurados en Negro)
         icon_cap = VGroup(
             RoundedRectangle(width=0.6, height=0.8, corner_radius=0.1, color=BLACK),
             Text("TB", font_size=14, color=BLACK).move_to(ORIGIN)
@@ -1872,47 +1821,59 @@ class Presentacion(Slide):
         ]
 
         tarjetas_finales = VGroup()
+        
         for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLUE_D, fill_opacity=1, stroke_width=0).align_to(base, LEFT)
+            # Fondo blanco con borde negro para el look B&W
+            base = RoundedRectangle(
+                width=8, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral en negro (en lugar de azul)
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
+            
             lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8) # Texto en negro
+            
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
             contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
-            tarjeta = VGroup(VGroup(base, borde_izq), contenido)
+            
+            tarjeta = VGroup(base, borde_izq, contenido)
             tarjetas_finales.add(tarjeta)
 
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
+
+        # Animación: Aparece todo el bloque al mismo tiempo
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
         
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            dir_ent = LEFT if i % 2 == 0 else RIGHT
-            self.play(FadeIn(tarjeta_centro, shift=dir_ent))
-            
-            if i == 0: self.play(Indicate(tarjeta_centro[1][0]))
-            elif i == 1: self.play(Rotate(tarjeta_centro[1][0][1:], angle=TAU, run_time=2))
-            elif i == 2: self.play(tarjeta_centro[1][0].animate.shift(RIGHT*0.1).set_color(BLUE), run_time=0.5, rate_func=there_and_back)
-
-            self.next_slide()
-            self.play(FadeOut(tarjeta_centro, shift=dir_ent*(-0.5)))
-
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
         self.next_slide()
         self.limpiar_pantalla()
         
         
     def slide_desventajas_hdd(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Desventajas del HDD", palabra_clave="Desventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Textos de desventajas
         txt_len = "Son más lentos que los SSD, especialmente en\narchivos grandes o multitarea compleja."
         txt_con = "Las partes mecánicas requieren mucha más\nenergía para operar que los chips flash."
         txt_dur = "Las partes móviles los hacen muy frágiles\nante caídas o golpes (pérdida de datos)."
         txt_rui = "Las placas giratorias generan calor y ruido,\nafectando la eficiencia del sistema."
 
-        icon_len = VGroup(Arc(radius=0.3, angle=PI*1.5, color=BLACK), Dot().scale(0.5))
+        # Iconos en escala de grises / Negro
+        icon_len = VGroup(Arc(radius=0.3, angle=PI*1.5, color=BLACK), Dot(color=BLACK).scale(0.5))
         icon_con = VGroup(Circle(radius=0.3, color=BLACK), Dot(color=BLACK)).scale(0.8)
-        icon_dur = VGroup(Line(UP*0.3, DOWN*0.3, color=BLACK), Line(LEFT*0.3, RIGHT*0.3, color=BLACK).rotate(PI/4)).set_color(RED)
+        # Eliminado el color RED para mantener el estilo B&W
+        icon_dur = VGroup(Line(UP*0.3, DOWN*0.3, color=BLACK), Line(LEFT*0.3, RIGHT*0.3, color=BLACK).rotate(PI/4))
         icon_rui = VGroup(*[Arc(radius=0.15*i, angle=PI/2, color=BLACK) for i in range(1,4)])
 
         datos = [
@@ -1924,31 +1885,39 @@ class Presentacion(Slide):
 
         tarjetas_finales = VGroup()
         for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=RED_D, fill_opacity=1, stroke_width=0).align_to(base, LEFT)
+            # Estructura visual: Fondo blanco, borde negro
+            base = RoundedRectangle(
+                width=8, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral en negro
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
+            
             lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
+            
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
             contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
-            tarjeta = VGroup(VGroup(base, borde_izq), contenido)
+            
+            tarjeta = VGroup(base, borde_izq, contenido)
             tarjetas_finales.add(tarjeta)
 
+        # Organización de las tarjetas en pantalla
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
 
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            dir_ent = RIGHT if i % 2 == 0 else LEFT
-            self.play(FadeIn(tarjeta_centro, shift=dir_ent))
-            
-            if i == 0: self.play(Rotate(tarjeta_centro[1][0], angle=-PI/2, run_time=1.5))
-            elif i == 1: self.play(Flash(tarjeta_centro[1][0], color=YELLOW, flash_radius=0.5))
-            elif i == 2: self.play(Wiggle(tarjeta_centro[1][0]))
-            elif i == 3: self.play(LaggedStart(*[Indicate(m) for m in tarjeta_centro[1][0]], lag_ratio=0.2))
+        # Animación: Aparece todo el bloque al mismo tiempo
+        # He usado un FadeIn colectivo con un pequeño desplazamiento hacia arriba
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-            self.next_slide()
-            self.play(FadeOut(tarjeta_centro, shift=dir_ent*(-0.5)))
-
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
         self.next_slide()
         self.limpiar_pantalla()
         
@@ -2194,13 +2163,16 @@ class Presentacion(Slide):
         self.limpiar_pantalla()
         
     def slide_ventajas_ssd(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Ventajas de las SSD", palabra_clave="Ventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Textos de ventajas
         txt_ren = "Son considerablemente más rápidas en el arranque,\ntransferencia de archivos y acceso a los datos."
         txt_dur = "Al carecer de partes móviles tienen menor riesgo\nde daños físicos, haciéndolas ideales para laptops."
         txt_con = "Consumen mucha menos energía, lo que contribuye\na una mayor duración de batería en portátiles."
 
+        # Iconos simplificados a Negro
         icon_ren = VGroup(
             Arrow(start=LEFT*0.25+DOWN*0.25, end=RIGHT*0.25+UP*0.25, color=BLACK, buff=0),
             Line(RIGHT*0.1+DOWN*0.1, RIGHT*0.3+DOWN*0.1, color=BLACK),
@@ -2223,42 +2195,53 @@ class Presentacion(Slide):
 
         tarjetas_finales = VGroup()
         for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=BLUE_D, fill_opacity=1, stroke_width=0).align_to(base, LEFT)
+            # Estructura visual: Fondo blanco y trazo negro
+            base = RoundedRectangle(
+                width=8, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral en negro (antes azul)
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
+            
             lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
+            
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
             contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
-            tarjeta = VGroup(VGroup(base, borde_izq), contenido)
+            
+            tarjeta = VGroup(base, borde_izq, contenido)
             tarjetas_finales.add(tarjeta)
 
+        # Organizar el grupo
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
-        
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            dir_ent = LEFT if i % 2 == 0 else RIGHT
-            self.play(FadeIn(tarjeta_centro, shift=dir_ent))
-            
-            if i == 0: self.play(tarjeta_centro[1][0][0].animate.shift(RIGHT*0.1+UP*0.1), run_time=0.5, rate_func=there_and_back)
-            elif i == 1: self.play(Flash(tarjeta_centro[1][0], color=GREEN, flash_radius=0.4))
-            elif i == 2: self.play(tarjeta_centro[1][0][0].animate.set_fill(GREEN, opacity=0.4), run_time=1, rate_func=there_and_back)
 
-            self.next_slide()
-            self.play(FadeOut(tarjeta_centro, shift=dir_ent*(-0.5)))
+        # Animación de entrada: Todo el bloque junto
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
         self.next_slide()
         self.limpiar_pantalla()
 
 
     def slide_desventajas_ssd(self):
+        # Título en Blanco y Negro
         titulo, linea = self.crear_titulo("Desventajas de las SSD", palabra_clave="Desventajas", color_clave=BLACK)
         self.play(Write(titulo), Create(linea))
 
+        # Textos
         txt_cos = "El costo por unidad de almacenamiento sigue\nsiendo más alto en comparación con los HDD."
         txt_cap = "A medida que aumenta la capacidad el precio\ncrece considerablemente respecto a los HDD."
         txt_cor = "Un corte repentino de energía en la escritura\npuede causar pérdida o corrupción de datos."
 
+        # Iconos (Asegurados en Negro)
         icon_cos = Text("$", font_size=32, weight=BOLD, color=BLACK)
         icon_cap = VGroup(
             Line(DOWN*0.3, UP*0.3, color=BLACK), 
@@ -2269,7 +2252,6 @@ class Presentacion(Slide):
         triangulo_cor = Triangle(color=BLACK).scale(0.4)
         exclamacion = Text("!", font_size=26, weight=BOLD, color=BLACK)
         exclamacion.move_to(triangulo_cor.get_center() + DOWN * 0.08)
-        
         icon_cor = VGroup(triangulo_cor, exclamacion)
 
         datos = [
@@ -2280,30 +2262,39 @@ class Presentacion(Slide):
 
         tarjetas_finales = VGroup()
         for i, (tit, txt, icono) in enumerate(datos):
-            base = RoundedRectangle(width=8, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.3, stroke_width=0)
-            borde_izq = Rectangle(width=0.15, height=1.3, fill_color=RED_D, fill_opacity=1, stroke_width=0).align_to(base, LEFT)
+            # Estructura: Fondo blanco, borde negro
+            base = RoundedRectangle(
+                width=8, height=1.3, corner_radius=0.1, 
+                fill_color=WHITE, fill_opacity=1, 
+                stroke_color=BLACK, stroke_width=2
+            )
+            # Detalle lateral en negro sólido
+            borde_izq = Rectangle(
+                width=0.15, height=1.3, 
+                fill_color=BLACK, fill_opacity=1, 
+                stroke_width=0
+            ).align_to(base, LEFT)
+            
             lbl_tit = Text(tit, font_size=20, weight=BOLD, color=BLACK)
-            lbl_txt = Text(txt, font_size=14, color=DARK_GRAY, line_spacing=0.8)
+            lbl_txt = Text(txt, font_size=14, color=BLACK, line_spacing=0.8)
+            
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+            
             contenido = VGroup(icono.copy(), grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
-            tarjeta = VGroup(VGroup(base, borde_izq), contenido)
+            
+            tarjeta = VGroup(base, borde_izq, contenido)
             tarjetas_finales.add(tarjeta)
 
+        # Organización de las tarjetas
         tarjetas_finales.arrange(DOWN, buff=0.2).shift(DOWN*0.2)
 
-        for i, tarjeta_base in enumerate(tarjetas_finales):
-            tarjeta_centro = tarjeta_base.copy().scale(1.15).move_to(DOWN * 0.2)
-            dir_ent = RIGHT if i % 2 == 0 else LEFT
-            self.play(FadeIn(tarjeta_centro, shift=dir_ent))
-            
-            if i == 0: self.play(Wiggle(tarjeta_centro[1][0]))
-            elif i == 1: self.play(tarjeta_centro[1][0][2].animate.scale(1.3), run_time=0.8, rate_func=there_and_back)
-            elif i == 2: self.play(Flash(tarjeta_centro[1][0], color=RED, flash_radius=0.4))
+        # Animación: Aparece todo el bloque al mismo tiempo
+        # Usamos un fundido con desplazamiento para dar fluidez sin ir uno por uno
+        self.play(
+            FadeIn(tarjetas_finales, shift=UP*0.3),
+            run_time=1.5
+        )
 
-            self.next_slide()
-            self.play(FadeOut(tarjeta_centro, shift=dir_ent*(-0.5)))
-
-        self.play(LaggedStart(*[FadeIn(t, shift=DOWN*0.2) for t in tarjetas_finales], lag_ratio=0.15))
         self.next_slide()
         self.limpiar_pantalla()
         
