@@ -8,46 +8,46 @@ class Presentacion(Slide):
     def construct(self):
         self.camera.background_color = WHITE
         
-        # --- INTRODUCCIÓN Y MOTIVACIÓN ---
-        self.slide_memoria_computador() # Jerónimo Hoyos
-        self.slide_por_que_jerarquia() # Jerónimo Hoyos
-        self.slide_motivacion() # Jerónimo Hoyos
+        # # --- INTRODUCCIÓN Y MOTIVACIÓN ---
+        # self.slide_memoria_computador() # Jerónimo Hoyos
+        # self.slide_por_que_jerarquia() # Jerónimo Hoyos
+        # self.slide_motivacion() # Jerónimo Hoyos
 
-        # --- CONCEPTOS BASE ---
-        self.slide_memoria_primaria() # Mateo
-        self.slide_memoria_secundaria() # Mateo
+        # # --- CONCEPTOS BASE ---
+        # self.slide_memoria_primaria() # Mateo
+        # self.slide_memoria_secundaria() # Mateo
 
-        # --- NIVELES DE JERARQUÍA (PRIMARIA) ---
-        self.slide_registers() # Jerónimo Hoyos
-        self.slide_cache() # Jerónimo Hoyos
-        self.slide_ram() # Jerónimo Hoyos
-        self.slide_ram_escalabilidad() # Jerónimo Hoyos
+        # # --- NIVELES DE JERARQUÍA (PRIMARIA) ---
+        # self.slide_registers() # Jerónimo Hoyos
+        # self.slide_cache() # Jerónimo Hoyos
+        # self.slide_ram() # Jerónimo Hoyos
+        # self.slide_ram_escalabilidad() # Jerónimo Hoyos
 
-        # --- ALMACENAMIENTO (SECUNDARIA) ---
-        self.almacenamiento_secundario() # Mateo
+        # # --- ALMACENAMIENTO (SECUNDARIA) ---
+        # self.almacenamiento_secundario() # Mateo
 
-        # --- DISCOS DUROS (HDD) ---
-        self.diapositiva_detalles_hdd() # Juan
-        self.slide_funcionamiento_hdd() # Juan
-        self.slide_delay_hdd() # Juan
-        self.slide_comparativa_hdd() # Juan
+        # # --- DISCOS DUROS (HDD) ---
+        # self.diapositiva_detalles_hdd() # Juan
+        # self.slide_funcionamiento_hdd() # Juan
+        # self.slide_delay_hdd() # Juan
+        # self.slide_comparativa_hdd() # Juan
 
-        # --- ESTADO SÓLIDO (SSD) Y FLASH ---
+        # # --- ESTADO SÓLIDO (SSD) Y FLASH ---
         self.slide_ssd_unidades() # Jerónimo Restrepo
-        self.slide_ssd_funcionamiento() # Jerónimo Restrepo
-        self.slide_tipos_memoria_flash() # Jerónimo Restrepo
-        self.slide_comparativa_ssd() # Jerónimo Restrepo
+        # self.slide_ssd_funcionamiento() # Jerónimo Restrepo
+        # self.slide_tipos_memoria_flash() # Jerónimo Restrepo
+        # self.slide_comparativa_ssd() # Jerónimo Restrepo
 
-        # --- CONCLUSIONES Y COMPARATIVAS ---
-        self.slide_caracteristicas() # Mateo
-        self.slide_comparativa_jerarquia() # Mateo
-        self.slide_memory_standards() # Mateo
+        # # --- CONCLUSIONES Y COMPARATIVAS ---
+        # self.slide_caracteristicas() # Mateo
+        # self.slide_comparativa_jerarquia() # Mateo
+        # self.slide_memory_standards() # Mateo
 
-        # --- PRÁCTICA / SIMULACIÓN ---
-        self.slide_simulador_nand2tetris() # Jerónimo Hoyos
+        # # --- PRÁCTICA / SIMULACIÓN ---
+        # self.slide_simulador_nand2tetris() # Jerónimo Hoyos
 
-        # --- CIERRE ---
-        self.slide_despedida()
+        # # --- CIERRE ---
+        # self.slide_despedida()
 
     def crear_titulo(self, texto, palabra_clave=None, color_clave=DARK_GRAY, font_size=42):
         t2c = {palabra_clave: color_clave} if palabra_clave else {}
@@ -1901,8 +1901,6 @@ class Presentacion(Slide):
         titulo.to_edge(UP, buff=0.4)
         linea_titulo = Line(LEFT, RIGHT, color=BLACK, stroke_width=3).scale(4).next_to(titulo, DOWN, buff=0.2)
         
-        self.play(Write(titulo), Create(linea_titulo))
-
         # --- 2. DIBUJO VECTORIAL DEL SSD (Izquierda) ---
         ssd_case = RoundedRectangle(width=2.8, height=3.8, corner_radius=0.15, fill_color=LIGHT_GRAY, fill_opacity=0.2, stroke_color=BLACK, stroke_width=3)
         
@@ -1949,7 +1947,6 @@ class Presentacion(Slide):
         tarjetas = VGroup()
         for i, (tit, txt, icono) in enumerate(datos):
             base = RoundedRectangle(width=7.5, height=1.3, corner_radius=0.1, fill_color=LIGHT_GRAY, fill_opacity=0.2, stroke_width=0)
-            # Cambié BLUE_D a DARK_GRAY para mantener todo en Blanco/Negro
             borde_izq = Rectangle(width=0.15, height=1.3, fill_color=DARK_GRAY, fill_opacity=1, stroke_width=0).align_to(base, LEFT)
             
             lbl_tit = Text(tit, font=FUENTE, font_size=20, weight=BOLD, color=BLACK)
@@ -1957,16 +1954,23 @@ class Presentacion(Slide):
             grupo_txt = VGroup(lbl_tit, lbl_txt).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             contenido = VGroup(icono, grupo_txt).arrange(RIGHT, buff=0.4).move_to(base.get_center()).align_to(base, LEFT).shift(RIGHT*0.5)
             
-            tarjetas.add(VGroup(VGroup(base, borde_izq), contenido))
+            # NOTA: Agrupamos todo para que sea una sola tarjeta
+            tarjeta_completa = VGroup(base, borde_izq, contenido)
+            tarjetas.add(tarjeta_completa)
 
         tarjetas.arrange(DOWN, buff=0.3).to_edge(RIGHT, buff=0.5).shift(DOWN*0.2)
 
 
         # --- 4. SECUENCIA DE ANIMACIÓN ---
+        self.play(Write(titulo), Create(linea_titulo))
+        
         # Primero dibujamos el SSD
         self.play(Create(ssd_case))
         self.play(FadeIn(connector_group, shift=UP), Write(lbl_ssd))
         self.play(Create(chips), run_time=1.5)
+
+        # ¡AQUÍ ESTÁ LA SOLUCIÓN! Animamos las tarjetas para que aparezcan
+        self.play(FadeIn(tarjetas, shift=LEFT))
 
         self.next_slide()
         self.limpiar_pantalla()
